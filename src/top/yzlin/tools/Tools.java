@@ -58,23 +58,33 @@ public class Tools {
         }
         return nativeValue;
     }
+
+
+    public static String sendGet(String url, String param) {
+        return sendGet(url,param, conn -> {
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+        });
+    }
+
+
+
     /**
      * 获取GET数据
      */
-    public static String sendGet(String url, String param) {
+    public static String sendGet(String url, String param,SetConnection connections) {
         HttpURLConnection connection;
         try {
             connection = (HttpURLConnection) new URL(url + "?" + param).openConnection();
-            connection.setRequestProperty("accept", "*/*");
-            connection.setRequestProperty("connection","Keep-Alive");
-            connection.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            connections.setConnection(connection);
             HttpURLConnection.setFollowRedirects(true);
             connection.setInstanceFollowRedirects(false);
             connection.connect();
         } catch (IOException e) {
             Tools.print("get的网络区炸了，10秒之后重新获取");
             Tools.sleep(10000);
-            return Tools.sendGet(url, param);
+            return Tools.sendGet(url, param,connections);
         }
         try (BufferedReader in= new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf8"))){
             String line;
@@ -86,9 +96,15 @@ public class Tools {
         } catch (IOException e ) {
             Tools.print("get的读写区炸了，10秒之后重新获取");
             Tools.sleep(10000);
-            return Tools.sendGet(url, param);
+            return Tools.sendGet(url, param,connections);
         }
     }
+
+
+
+
+
+
 
     /**
      * post数据
