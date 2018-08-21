@@ -15,7 +15,7 @@ public class NewMember {
     public NewMember(CQRoot mt,String GID){
         this.mt=mt;
         this.GID=GID;
-        mt.addMsgSolution(this::changeNewMemberWord);
+//        mt.addMsgSolution(this::changeNewMemberWord);
     }
 
     public void addAdmin(String admin) {
@@ -27,7 +27,7 @@ public class NewMember {
         if(valueOf(CQRoot.GET_PERSON_MSG).equals(map.get("act")) && adminSet.contains(fromQQ)){
             String msg=map.get("msg");
             if(msg.indexOf("设置群新成员消息:")==0||msg.indexOf("设置群新成员消息：")==0){
-                mt.groupMemberIncrease(GID,msg.substring(9));
+//                mt.groupMemberIncrease(GID,msg.substring(9));
             }
         }
     }

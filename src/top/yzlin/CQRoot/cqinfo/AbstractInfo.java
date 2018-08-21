@@ -1,70 +1,41 @@
 package top.yzlin.CQRoot.cqinfo;
 
-import net.sf.json.JSONObject;
-import top.yzlin.CQRoot.CQRoot;
 
 public abstract class AbstractInfo {
-    private String act;
-    private String fromQQ;
-    private String sendTime;
-    private String subType;
+    private int act = -1;
+    private String fromQQ = "";
+    private long sendTime;
+    private int subType = -1;
 
-    protected AbstractInfo(JSONObject text){
-        this.act=text.getString("act");
-        this.sendTime=text.getString("sendTime");
-        this.subType=text.getString("subType");
-        if("102".equals(act) && "1".equals(subType)){
-            this.fromQQ="";
-        }else if("101".equals(act)){
-            this.fromQQ="";
-        }else{
-            this.fromQQ=text.getString("fromQQ");
-        }
-    }
-
-    final public String getAct() {
+    public int getAct() {
         return act;
     }
 
-    /**
-     * 当不存在该字段时，该字段为空字符串，即fromQQ="";
-     * 一般是群事件-管理员变动与群事件-群成员减少（成员自己离开）才会有空
-     * @return
-     */
-    final public String getFromQQ() {
+    public void setAct(int act) {
+        this.act = act;
+    }
+
+    public String getFromQQ() {
         return fromQQ;
     }
 
-    final public String getSendTime() {
+    public void setFromQQ(String fromQQ) {
+        this.fromQQ = fromQQ;
+    }
+
+    public long getSendTime() {
         return sendTime;
     }
 
-    final public String getSubType() {
+    public void setSendTime(long sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public int getSubType() {
         return subType;
     }
 
-    public static AbstractInfo getInfo(JSONObject data){
-        switch(data.getInt("act")){
-            case CQRoot.GET_GROUP_MSG:
-                return new GroupMsgInfo(data);
-            case CQRoot.GET_DISCUSS_MSG:
-                return new DiscussMsgInfo(data);
-            case CQRoot.GET_PERSON_MSG:
-                return new PersonMsgInfo(data);
-            case CQRoot.GET_GROUP_ADMIN_CHANGE:
-                return new GroupAdminChangeEventInfo(data);
-            case CQRoot.GET_GROUP_MEMBER_DECREASE:
-                return new GroupMemberDecreaseEventInfo(data);
-            case CQRoot.GET_GROUP_MEMBER_INCREASE:
-                return new GroupMemberIncreaseEventInfo(data);
-            case CQRoot.GET_GROUP_REQUEST:
-                return new GroupMemberRequestEventInfo(data);
-            case CQRoot.GET_FRIEND_INCREASE:
-                return new FriendIncreaseEventInfo(data);
-            case CQRoot.GET_FRIEND_REQUEST:
-                return new FriendRequestEventInfo(data);
-        }
-        return null;
+    public void setSubType(int subType) {
+        this.subType = subType;
     }
-
 }

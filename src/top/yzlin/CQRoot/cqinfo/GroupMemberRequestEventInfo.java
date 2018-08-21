@@ -1,15 +1,16 @@
 package top.yzlin.CQRoot.cqinfo;
 
-import net.sf.json.JSONObject;
-
 final public class GroupMemberRequestEventInfo extends EventInfo {
+    final public static int SUBTYPE_APPLY = 1;
+    final public static int SUBTYPE_OWN_APPLY = 2;
+
     private String formGroup;
 
-    protected GroupMemberRequestEventInfo(JSONObject text) {
-        super(text);
+    public String getFormGroup() {
+        return formGroup;
     }
 
-    final public String getFormGroup() {
-        return formGroup;
+    public void setFormGroup(String formGroup) {
+        this.formGroup = formGroup;
     }
 }

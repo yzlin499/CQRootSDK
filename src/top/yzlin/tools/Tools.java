@@ -1,5 +1,6 @@
 package top.yzlin.tools;
-import net.sf.json.JSONObject;
+
+import com.alibaba.fastjson.JSONObject;
 import top.yzlin.netInterface.IOExceptionSolution;
 import top.yzlin.netInterface.SetConnection;
 
@@ -207,7 +208,7 @@ public class Tools {
         if(temp==null){
             return null;
         }
-        JSONObject t=JSONObject.fromObject(temp.substring(1,temp.length()-1));
+        JSONObject t = JSONObject.parseObject(temp.substring(1, temp.length() - 1));
         return t.getString("url_short");
     }
 
@@ -237,6 +238,9 @@ public class Tools {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        if (t.length() > 80) {
+            t = t.substring(0, 78) + "......";
         }
         return t;
     }

@@ -1,48 +1,52 @@
 package top.yzlin.CQRoot.cqinfo;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-import top.yzlin.tools.Tools;
-
+/**
+ * 信息型消息
+ */
 public class MsgInfo extends AbstractInfo{
-    private String msg;
-    private String font;
+    private String msg = "";
+    private String font = "";
     private String nick="";
     private String sex="";
     private String age="";
 
-    protected MsgInfo(JSONObject text) {
-        super(text);
-        try {
-            this.msg = text.getString("msg");
-            this.font = text.getString("font");
-            this.sex = text.containsKey("sex")?text.getString("sex"):"";
-            this.age = text.containsKey("age")?text.getString("age"):"";
-            this.nick = text.containsKey("nick")?text.getString("nick"):"";
-        }catch(JSONException ex){
-            Tools.print("出现了其他无法识别的无法识别");
-        }
-    }
-
-    final public String getMsg() {
+    public String getMsg() {
         return msg;
     }
 
-    final public String getFont() {
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getFont() {
         return font;
     }
 
-    final public String getNick() {
+    public void setFont(String font) {
+        this.font = font;
+    }
+
+    public String getNick() {
         return nick;
     }
 
-    final public String getSex() {
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    public String getSex() {
         return sex;
     }
 
-    final public String getAge() {
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getAge() {
         return age;
     }
 
-
+    public void setAge(String age) {
+        this.age = age;
+    }
 }

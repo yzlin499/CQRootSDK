@@ -2,6 +2,5 @@ package top.yzlin.CQRoot.msginterface;
 
 import top.yzlin.CQRoot.cqinfo.GroupMsgInfo;
 
-public interface GroupMsgSolution {
-    void msgSolution(GroupMsgInfo msg);
+public interface GroupMsgSolution extends EventSolution<GroupMsgInfo> {
 }
