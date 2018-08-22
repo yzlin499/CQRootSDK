@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 
 
@@ -44,20 +45,20 @@ public class Tools {
      */
     public static String asciiToNative(String asciicode) {
         String[] asciis = asciicode.split("\\\\u");
-        String nativeValue = asciis[0];
+        StringBuilder nativeValue = Optional.ofNullable(asciis[0]).map(StringBuilder::new).orElse(null);
         try {
             for (int i = 1; i < asciis.length; i++) {
                 String code = asciis[i];
-                nativeValue += (char) Integer
-                        .parseInt(code.substring(0, 4), 16);
+                nativeValue = (nativeValue == null ? new StringBuilder("null") : nativeValue).append((char) Integer
+                        .parseInt(code.substring(0, 4), 16));
                 if (code.length() > 4) {
-                    nativeValue += code.substring(4, code.length());
+                    nativeValue.append(code.substring(4, code.length()));
                 }
             }
         } catch (NumberFormatException e) {
             return asciicode;
         }
-        return nativeValue;
+        return nativeValue == null ? null : nativeValue.toString();
     }
 
 
@@ -89,11 +90,11 @@ public class Tools {
         }
         try (BufferedReader in= new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf8"))){
             String line;
-            String result="";
+            StringBuilder result = new StringBuilder();
             while ((line = in.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
-            return result;
+            return result.toString();
         } catch (IOException e ) {
             Tools.print("get的读写区炸了，10秒之后重新获取");
             Tools.sleep(10000);
@@ -183,11 +184,11 @@ public class Tools {
         }
         try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf8"))){
             String line;
-            String result="";
+            StringBuilder result = new StringBuilder();
             while ((line = in.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
-            return result;
+            return result.toString();
         } catch (IOException e) {
             if(solution!=null){
                 solution.exceptionSolution(e);
@@ -279,11 +280,11 @@ public class Tools {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String num=new BigInteger(1, md.digest()).toString(16);
+        StringBuilder num = new StringBuilder(new BigInteger(1, md.digest()).toString(16));
         while(num.length()<32){
-            num="0"+num;
+            num.insert(0, "0");
         }
-        return num;
+        return num.toString();
     }
 
     /**
