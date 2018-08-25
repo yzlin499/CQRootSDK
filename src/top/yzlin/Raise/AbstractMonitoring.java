@@ -81,7 +81,7 @@ public abstract class AbstractMonitoring implements Runnable {
     protected String sendText(String name, String money, String nowMoney, String title, String goalMoney, String moneyUrl, String endTime) {
         return "感谢" + name + "聚聚支持了【" + title + "】" + money + "元\n" +
                 "当前进度:" + nowMoney + "元,目标 ：" + goalMoney + "元\n" +
-                "集资链接:" + Tools.getTinyURL(moneyUrl);
+                "集资链接:" + moneyUrl;
     }
 
 }

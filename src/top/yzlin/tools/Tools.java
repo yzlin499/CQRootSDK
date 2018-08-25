@@ -96,6 +96,7 @@ public class Tools {
             }
             return result.toString();
         } catch (IOException e ) {
+            e.printStackTrace();
             Tools.print("get的读写区炸了，10秒之后重新获取");
             Tools.sleep(10000);
             return Tools.sendGet(url, param,connections);

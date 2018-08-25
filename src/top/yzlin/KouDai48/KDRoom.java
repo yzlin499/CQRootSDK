@@ -11,6 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import static top.yzlin.tools.Tools.sendPost;
+
 public class KDRoom {
     /*创建文档*/
     static {
@@ -241,5 +243,14 @@ public class KDRoom {
                 return tok;
             }
         }
+    }
+
+    public void autoSignIn() {
+        new Thread(() -> {
+            while (true) {
+                Tools.print(sendPost("https://puser.48.cn/usersystem/api/user/v1/check/in", "{}", conn));
+                Tools.sleep(1000 * 60 * 60 * 24);
+            }
+        }).start();
     }
 }
