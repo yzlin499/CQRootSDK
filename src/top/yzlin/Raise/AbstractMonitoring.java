@@ -54,15 +54,13 @@ public abstract class AbstractMonitoring implements Runnable {
     /**
      * 发送信息
      *
-     * @param name
-     * @param money
-     * @param nowMoney
+     * @param raiseData
      */
-    final protected void sendMsg(String name, String money, String nowMoney) {
-        Tools.print("[" + title + "]项目" + name + "资助" + money + "元");
+    final void sendMsg(RaiseData raiseData, String nowMoney) {
+        Tools.print("[" + title + "]项目" + raiseData.getNickName() + "资助" + raiseData.getRaiseMoney() + "元");
         QQMT.sendGroupMsg(QQGID,
-                sendText(name, money, nowMoney, title, goalMoney, moneyUrl, endTime) +
-                        (raiseEvent == null ? "" : raiseEvent.eventTrigger(name, money)));
+                sendText(raiseData.getNickName(), raiseData.getRaiseMoney(), nowMoney, title, goalMoney, moneyUrl, endTime) +
+                        (raiseEvent == null ? "" : raiseEvent.eventTrigger(raiseData.getNickName(), raiseData.getRaiseMoney())));
     }
 
 
@@ -78,7 +76,7 @@ public abstract class AbstractMonitoring implements Runnable {
      * @param endTime   结束时间
      * @return 这个方法的返回值会发给这个群
      */
-    protected String sendText(String name, String money, String nowMoney, String title, String goalMoney, String moneyUrl, String endTime) {
+    protected String sendText(String name, double money, String nowMoney, String title, String goalMoney, String moneyUrl, String endTime) {
         return "感谢" + name + "聚聚支持了【" + title + "】" + money + "元\n" +
                 "当前进度:" + nowMoney + "元,目标 ：" + goalMoney + "元\n" +
                 "集资链接:" + moneyUrl;

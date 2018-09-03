@@ -7,10 +7,8 @@ import top.yzlin.CQRoot.CQRoot;
 import top.yzlin.tools.Tools;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.stream.Stream;
 
 public class ModianMonitoring extends AbstractMonitoring {
     //优化代码的变量
@@ -18,32 +16,6 @@ public class ModianMonitoring extends AbstractMonitoring {
     private String ordersParam;//储存集资列表的参数
     private boolean threadIsRun = true;
     private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private class RaiseData {
-        private String nickName = "";
-        private String raiseMoney = "";
-        private long raiseTime;
-
-        private RaiseData(String nickName, String raiseMoney, long raiseTime) {
-            this.nickName = nickName;
-            this.raiseMoney = raiseMoney;
-            this.raiseTime = raiseTime;
-        }
-
-        private long getRaiseTime() {
-            return raiseTime;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (RaiseData.class.equals(o.getClass())) {
-                RaiseData raiseData = (RaiseData) o;
-                return nickName.equals(raiseData.nickName) && raiseMoney.equals(raiseData.raiseMoney) && raiseTime == raiseData.raiseTime;
-            } else {
-                return false;
-            }
-        }
-    }//储存信息类
 
     /**
      * 这是一个摩点的集资的对象
@@ -75,6 +47,8 @@ public class ModianMonitoring extends AbstractMonitoring {
         new Thread(this).start();
     }
 
+//    public String
+
     public static void main(String args[]) {
         String pro_id = "28243";
         String ordersParam = "page=1&pro_id=" + pro_id + "&sign=" + Tools.MD5("page=1&pro_id=" + pro_id + "&p=das41aq6").substring(5, 21);
@@ -89,12 +63,12 @@ public class ModianMonitoring extends AbstractMonitoring {
         Tools.sleep(1500);
         String nowMoney;
         RaiseData[] data;
-        RaiseData lastRaise = getOrdersData(new RaiseData(null, null, 0))[0];
+        RaiseData lastRaise = getOrdersData(RaiseData.empty)[0];
         while (threadIsRun) {
             nowMoney = getNowMoney();
             data = getOrdersData(lastRaise);
             for (RaiseData temp : data) {
-                sendMsg(temp.nickName, temp.raiseMoney, nowMoney);
+                sendMsg(temp, nowMoney);
             }
             lastRaise = data.length > 0 ? data[0] : lastRaise;
             Tools.sleep(getFrequency());
@@ -146,28 +120,12 @@ public class ModianMonitoring extends AbstractMonitoring {
                 Tools.sleep(100000);
                 return getOrdersData(raiseData);
             }
-            JSONObject[] jsonObject = new JSONObject[tja.size()];
-            tja.toArray(jsonObject);
-            return Stream.of(jsonObject)
-                    .map(h -> {
-                        String nickName = h.getString("nickname");
-                        String backerMoney = h.getString("backer_money");
-                        String payTime = h.getString("pay_time");
-                        try {
-                            return new RaiseData(nickName, backerMoney, df.parse(payTime).getTime());
-                        } catch (ParseException e) {
-                            return null;
-                        }
-                    }).filter(h -> {
-                        if (h == null) {
-                            return false;
-                        } else {
-                            return h.raiseTime > raiseData.raiseTime;
-                        }
-                    }).sorted(Comparator.comparing(RaiseData::getRaiseTime).reversed())
+            return tja.toJavaList(RaiseData.class).stream()
+                    .filter(h -> h.getPayTime() > raiseData.getPayTime())
+                    .sorted(Comparator.comparing(RaiseData::getPayTime).reversed())
                     .toArray(RaiseData[]::new);
         } catch (IOException e) {
-            Tools.print("读取集资列表时炸了老哥,30秒之后重新加载数据");
+            Tools.print("读取集资列表时炸了老哥,30秒之后重新加载数据" + e.getMessage());
             Tools.sleep(30000);
             return getOrdersData(raiseData);
         }

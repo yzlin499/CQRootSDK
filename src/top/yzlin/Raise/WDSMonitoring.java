@@ -18,16 +18,6 @@ public class WDSMonitoring extends AbstractMonitoring {
     private String infoURL;//储存项目详情的参数
     private String ordersParam;//储存集资列表的参数
 
-    private class RaiseData {
-        private String nickName;
-        private String raiseMoney;
-
-        private RaiseData(String nickName, String raiseMoney) {
-            this.nickName = nickName;
-            this.raiseMoney = raiseMoney;
-        }
-    }//储存信息类
-
     /**
      * 这是一个微打赏的集资的线程
      *
@@ -76,8 +66,8 @@ public class WDSMonitoring extends AbstractMonitoring {
                 temp = nowMoney - oldMoney;
                 Tools.sleep(5000);
                 for (RaiseData data : getData()) {
-                    sendMsg(data.nickName, data.raiseMoney, String.valueOf(nowMoney));
-                    temp -= Double.parseDouble(data.raiseMoney);
+                    sendMsg(data, String.valueOf(nowMoney));
+                    temp -= data.getRaiseMoney();
                     if (temp <= 0.01) {
                         break;
                     }
@@ -112,12 +102,13 @@ public class WDSMonitoring extends AbstractMonitoring {
                         .get(0)
                         .text()
                         .contains("分钟"))
-                .map(h -> new RaiseData(
-                        h.getElementsByClass("nick")
-                                .text(),
-                        h.getElementsByClass("nick_sup")
-                                .text()
-                                .replaceAll("支持了|元", "")))
-                .toArray(RaiseData[]::new);
+                .map(h -> {
+                    RaiseData raiseData = new RaiseData();
+                    raiseData.setNickName(h.getElementsByClass("nick").text());
+                    raiseData.setRaiseMoney(Double.parseDouble(h.getElementsByClass("nick_sup")
+                            .text()
+                            .replaceAll("支持了|元", "")));
+                    return raiseData;
+                }).toArray(RaiseData[]::new);
     }
 }

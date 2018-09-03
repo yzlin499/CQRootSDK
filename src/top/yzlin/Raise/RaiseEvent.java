@@ -7,5 +7,5 @@ public interface RaiseEvent {
     void transferInfo(String GID, CQRoot cqRoot);
 
     //设置集资监控的触发
-    String eventTrigger(String name, String money);
+    String eventTrigger(String name, double money);
 }

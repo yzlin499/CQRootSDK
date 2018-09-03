@@ -1,35 +1,60 @@
 package top.yzlin.CQRoot;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import top.yzlin.CQRoot.cqinfo.GroupMemberIncreaseEventInfo;
+import top.yzlin.CQRoot.cqinfo.PersonMsgInfo;
+import top.yzlin.CQRoot.msginterface.GroupMemberIncreaseSolution;
+import top.yzlin.CQRoot.msginterface.reply.PersonMsgReply;
 
-import static java.lang.String.valueOf;
+import java.util.HashSet;
+import java.util.Objects;
 
 public class NewMember {
     private CQRoot mt;
     private String GID;
     private HashSet<String> adminSet=new HashSet<>();
 
-
+    private String newMember = "";
 
     public NewMember(CQRoot mt,String GID){
         this.mt=mt;
         this.GID=GID;
-//        mt.addMsgSolution(this::changeNewMemberWord);
+        mt.addMsgSolution((GroupMemberIncreaseSolution) this::groupMemberIncrease);
+        mt.addMsgSolution(new PersonMsgReply() {
+
+            @Override
+            public boolean fromQQ(String from) {
+                return adminSet.contains(from);
+            }
+
+            @Override
+            public boolean checkMsg(String msg) {
+                return msg.indexOf("设置群新成员消息") == 0 && (msg.charAt(8) == ':' || msg.charAt(8) == '：');
+            }
+
+            @Override
+            public String replyMsg(PersonMsgInfo a) {
+                newMember = a.getMsg().substring(9);
+                return "欢迎词设置成功";
+            }
+        });
+    }
+
+    public String getNewMember() {
+        return newMember;
+    }
+
+    public void setNewMember(String newMember) {
+        this.newMember = newMember;
+    }
+
+    private void groupMemberIncrease(GroupMemberIncreaseEventInfo Msg) {
+        if (Objects.equals(GID, Msg.getFromGroup())) {
+            mt.sendGroupMsg(GID, newMember);
+        }
     }
 
     public void addAdmin(String admin) {
         adminSet.add(admin);
-    }
-
-    private void changeNewMemberWord(HashMap<String,String> map){
-        String fromQQ=map.get("fromQQ");
-        if(valueOf(CQRoot.GET_PERSON_MSG).equals(map.get("act")) && adminSet.contains(fromQQ)){
-            String msg=map.get("msg");
-            if(msg.indexOf("设置群新成员消息:")==0||msg.indexOf("设置群新成员消息：")==0){
-//                mt.groupMemberIncrease(GID,msg.substring(9));
-            }
-        }
     }
 
 }
