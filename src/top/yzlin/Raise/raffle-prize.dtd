@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!ELEMENT cardPools (cardPool+)>
+        <!ELEMENT cardPool (card+)>
+        <!ELEMENT card EMPTY>
+        <!ATTLIST cardPool money CDATA #REQUIRED>
+        <!ATTLIST card name CDATA #REQUIRED>
+        <!ATTLIST card probability CDATA #REQUIRED>
+        <!ATTLIST card picturePath CDATA #IMPLIED>

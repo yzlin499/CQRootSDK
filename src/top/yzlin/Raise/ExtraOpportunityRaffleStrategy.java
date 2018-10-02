@@ -1,7 +1,6 @@
 package top.yzlin.Raise;
 
 public class ExtraOpportunityRaffleStrategy implements RaiseStrategy {
-    private boolean bu;
 
     private double raiseMoney;
     private double minLimit;
@@ -31,7 +30,7 @@ public class ExtraOpportunityRaffleStrategy implements RaiseStrategy {
 
     @Override
     public boolean nextRaffle() {
-        bu = raiseMoney >= minLimit;
+        boolean bu = raiseMoney >= minLimit;
         raiseMoney -= minLimit;
         return bu;
     }

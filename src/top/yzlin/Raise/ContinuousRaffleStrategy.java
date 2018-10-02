@@ -1,17 +1,9 @@
 package top.yzlin.Raise;
 
+/**
+ * 通用普通连抽策略
+ */
 public class ContinuousRaffleStrategy implements RaiseStrategy {
-    private static class t {
-        private static ContinuousRaffleStrategy instance = new ContinuousRaffleStrategy();
-    }
-
-    private ContinuousRaffleStrategy() {
-    }
-
-    public static ContinuousRaffleStrategy getInstance() {
-        return t.instance;
-    }
-
     private double raiseMoney;
     private double minLimit;
 

@@ -34,7 +34,9 @@ public interface RaiseStrategy {
      *
      * @param name 此次被抽卡的名字
      */
-    boolean raiseName(String name);
+    default boolean raiseName(String name) {
+        return true;
+    }
 
     /**
      * 抽奖进行几次

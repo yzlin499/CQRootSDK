@@ -1,20 +1,25 @@
 package top.yzlin.Raise;
 
+import java.util.Objects;
+
 /**
  * 抽奖的实体类
  * 设置奖品与中奖几率
  *
- * @param <T>
  */
-public class RafflePrize<T> implements Comparable<RafflePrize> {
-    private T prize;
-    private int probability;
+public class RafflePrize implements Comparable<RafflePrize> {
+    static RafflePrize empty;
 
+    static {
+        empty = new RafflePrize("bug奖品", 0x7fffffff);
+    }
+
+    private String prize;
+    private int probability;
 
     private String picturePath;
 
-
-    public RafflePrize(T prize, int probability) {
+    public RafflePrize(String prize, int probability) {
         this.prize = prize;
         this.probability = probability;
     }
@@ -27,11 +32,11 @@ public class RafflePrize<T> implements Comparable<RafflePrize> {
         this.probability = probability;
     }
 
-    public T getPrize() {
+    public String getPrize() {
         return prize;
     }
 
-    public void setPrize(T prize) {
+    public void setPrize(String prize) {
         this.prize = prize;
     }
 
@@ -41,6 +46,34 @@ public class RafflePrize<T> implements Comparable<RafflePrize> {
 
     public String getPicturePath() {
         return picturePath;
+    }
+
+    @Override
+    public String toString() {
+        return "RafflePrize{" +
+                "prize='" + prize + '\'' +
+                ", probability=" + probability +
+                ", picturePath='" + picturePath + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(prize, probability);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof RafflePrize)) {
+            return false;
+        }
+        RafflePrize that = (RafflePrize) o;
+        return probability == that.probability &&
+                Objects.equals(prize, that.prize) &&
+                Objects.equals(picturePath, that.picturePath);
     }
 
     @Override

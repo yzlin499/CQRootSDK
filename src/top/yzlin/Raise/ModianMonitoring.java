@@ -49,12 +49,10 @@ public class ModianMonitoring extends AbstractMonitoring {
 
 //    public String
 
-    public static void main(String args[]) {
-        String pro_id = "28243";
-        String ordersParam = "page=1&pro_id=" + pro_id + "&sign=" + Tools.MD5("page=1&pro_id=" + pro_id + "&p=das41aq6").substring(5, 21);
-        String data = Tools.sendPost("https://wds.modian.com/api/project/orders", ordersParam);
-        System.out.println(JSONObject.parseObject(data));
-    }
+//    public static void main(String args[]) {
+//        ModianMonitoring wdsm=new ModianMonitoring("29933","370882358",null);
+//        Tools.printArrays(wdsm.getOrdersData(RaiseData.empty));
+//    }
 
     //主要线程
     @Override

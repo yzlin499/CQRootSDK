@@ -4,6 +4,8 @@ import top.yzlin.CQRoot.CQRoot;
 import top.yzlin.tools.Tools;
 
 public abstract class AbstractMonitoring implements Runnable {
+
+
     //基础信息
     private String QQGID;
     private CQRoot QQMT;
@@ -16,13 +18,13 @@ public abstract class AbstractMonitoring implements Runnable {
     private String endTime;
     private long frequency = 8000;
 
+
     protected AbstractMonitoring(String QQGID, CQRoot QQMT) {
         this.QQGID = QQGID;
         this.QQMT = QQMT;
     }
 
     final public void setRaiseEvent(RaiseEvent raiseEvent) {
-        raiseEvent.transferInfo(QQGID, QQMT);
         this.raiseEvent = raiseEvent;
     }
 
@@ -50,6 +52,13 @@ public abstract class AbstractMonitoring implements Runnable {
         this.title = title;
     }
 
+    public String getQQGID() {
+        return QQGID;
+    }
+
+    public CQRoot getQQMT() {
+        return QQMT;
+    }
 
     /**
      * 发送信息
@@ -60,7 +69,7 @@ public abstract class AbstractMonitoring implements Runnable {
         Tools.print("[" + title + "]项目" + raiseData.getNickName() + "资助" + raiseData.getRaiseMoney() + "元");
         QQMT.sendGroupMsg(QQGID,
                 sendText(raiseData.getNickName(), raiseData.getRaiseMoney(), nowMoney, title, goalMoney, moneyUrl, endTime) +
-                        (raiseEvent == null ? "" : raiseEvent.eventTrigger(raiseData.getNickName(), raiseData.getRaiseMoney())));
+                        (raiseEvent == null ? "" : raiseEvent.eventTrigger(raiseData)));
     }
 
 
