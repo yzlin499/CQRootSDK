@@ -137,24 +137,29 @@ public class CQRoot {
         //配置服务器
         try {
             client = new WebSocketClient(new URI(wsPath + ':' + port), new Draft_17()) {
+                @Override
                 public void onOpen(ServerHandshake arg0) {
                     Tools.print("成功链接webSocket,端口:" + port);
                 }
 
+                @Override
                 public void onMessage(String arg) {
                     CQRoot.this.onMessage(JSONObject.parseObject(arg));
                 }
 
+                @Override
                 public void onError(Exception arg0) {
                     arg0.printStackTrace();
                     Tools.log(arg0.getMessage());
                     Tools.print("CQRoot出错了，炸了炸了");
                 }
 
+                @Override
                 public void onClose(int arg0, String arg1, boolean arg2) {
                     Tools.print("关闭连接，断开");
                 }
 
+                @Override
                 public void onMessage(ByteBuffer bytes) {
                     try {
                         System.out.println(new String(bytes.array(), "utf-8"));

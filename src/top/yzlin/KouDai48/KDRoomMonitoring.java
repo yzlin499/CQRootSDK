@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.Clock;
-import java.util.Date;
 
 public class KDRoomMonitoring implements Runnable {
     private KDRoom kdRoom;
@@ -38,7 +37,7 @@ public class KDRoomMonitoring implements Runnable {
 
     @Override
     public void run() {
-        long theNewTime = new Date().getTime();
+        long theNewTime = System.currentTimeMillis();
         while (true) {
             KDRoomInfo roomInfo[] = kdRoom.getRoomMsg(theNewTime);
             if (roomInfo != null && roomInfo.length > 0) {

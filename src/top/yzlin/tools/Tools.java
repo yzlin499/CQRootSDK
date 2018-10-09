@@ -7,6 +7,7 @@ import top.yzlin.netInterface.SetConnection;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
@@ -23,8 +24,12 @@ public class Tools {
     private static final SimpleDateFormat df = new SimpleDateFormat("[MM-dd HH:mm:ss] ");
     private static FileWriter log;
     private static MessageDigest md;
+    private static File root;
+
+
     static{
         try {
+            root = new File(Tools.class.getClassLoader().getResource("").toURI());
             md= MessageDigest.getInstance("MD5");
             File temp=new File("doc\\log");
             if(!temp.exists()){
@@ -35,6 +40,8 @@ public class Tools {
             e.printStackTrace();
             System.out.println("日记文件创建失败");
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
@@ -296,4 +303,9 @@ public class Tools {
         long t= Clock.systemDefaultZone().millis()+TimeZone.getDefault().getRawOffset();
         return 86400000-(t%86400000);
     }
+
+    public static File getResources(String file) {
+        return new File(root, file);
+    }
+
 }

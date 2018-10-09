@@ -86,7 +86,6 @@ public class ModianMonitoring extends AbstractMonitoring {
             JSONObject data = JSONObject.parseObject(Tools.sendPost("https://wds.modian.com/api/project/detail", infoParam));
             if (!"0".equals(data.getString("status"))) {
                 Tools.print("项目最新进度获取失败");
-                Tools.print(data.getString("message"));
                 Tools.sleep(10000);
                 return getNowMoney();
             }
@@ -122,8 +121,12 @@ public class ModianMonitoring extends AbstractMonitoring {
                     .filter(h -> h.getPayTime() > raiseData.getPayTime())
                     .sorted(Comparator.comparing(RaiseData::getPayTime).reversed())
                     .toArray(RaiseData[]::new);
+        } catch (JSONException e) {
+            Tools.print("我大约着是摩点崩了，等个60秒吧");
+            Tools.sleep(60000);
+            return getOrdersData(raiseData);
         } catch (IOException e) {
-            Tools.print("读取集资列表时炸了老哥,30秒之后重新加载数据" + e.getMessage());
+            Tools.print("读取集资列表时炸了老哥,30秒之后重新加载数据");
             Tools.sleep(30000);
             return getOrdersData(raiseData);
         }
@@ -137,4 +140,19 @@ public class ModianMonitoring extends AbstractMonitoring {
             }
         }).start();
     }
+
+    public static String progressBar(double progress) {
+        char[] c = {'▏', '▎', '▍', '▌', '▋', '▊', '▉'};
+        if (progress >= 100) {
+            return "[██████████]";
+        }
+        char[] r = "[　　　　　　　　　　]".toCharArray();
+        for (int i = 1, j = (int) (progress / 10); i <= j; i++) {
+            r[i] = '█';
+        }
+        double d = progress % 10;
+        r[(int) (progress / 10) + 1] = c[(int) (d / 1.429)];
+        return new String(r);
+    }
+
 }
