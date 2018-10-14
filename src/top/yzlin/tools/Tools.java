@@ -86,6 +86,7 @@ public class Tools {
         HttpURLConnection connection;
         try {
             connection = (HttpURLConnection) new URL(url + "?" + param).openConnection();
+            connection.setConnectTimeout(30000);
             connections.setConnection(connection);
             HttpURLConnection.setFollowRedirects(true);
             connection.setInstanceFollowRedirects(false);
@@ -168,6 +169,7 @@ public class Tools {
         URLConnection conn;
         try {
             conn = new URL(url).openConnection();
+            conn.setConnectTimeout(30000);
             connections.setConnection(conn);
             conn.setDoOutput(true);
             conn.setDoInput(true);

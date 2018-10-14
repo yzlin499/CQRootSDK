@@ -81,8 +81,8 @@ public class KDLiveTeamMonitoring implements Runnable {
     }
 
     protected String sendText(KDLiveInfo kdLiveInfo, String memberName) {
-        String temp = memberName + "开" + kdLiveInfo.getLiveType() + "了\n";
-        temp += kdLiveInfo.getSubTitle() + "\n";
+        String temp = memberName + "开" + (kdLiveInfo.getLiveType() == 1 ? "直播" : "电台") + "了\n";
+        temp += "标题:" + kdLiveInfo.getSubTitle() + "\n";
         temp += "直播链接:" + Tools.getTinyURL("https://h5.48.cn/2017appshare/memberLiveShare/index.html?id=" + kdLiveInfo.getLiveId());
         return temp;
     }
